@@ -43,6 +43,13 @@
             <artifactId>webrtc-java</artifactId>
             <version>0.6.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-media -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>19</version>
+        </dependency>
+
     </dependencies>
 
     <build>

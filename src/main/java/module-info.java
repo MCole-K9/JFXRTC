@@ -1,6 +1,7 @@
 module com.example.jfxrtc {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
     requires webrtc.java;
 
 
