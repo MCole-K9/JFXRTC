@@ -5,8 +5,10 @@ import dev.onvoid.webrtc.media.MediaStream;
 import dev.onvoid.webrtc.media.MediaStreamTrack;
 import dev.onvoid.webrtc.media.audio.*;
 import dev.onvoid.webrtc.media.video.VideoDeviceSource;
+import dev.onvoid.webrtc.media.video.VideoFrame;
 import dev.onvoid.webrtc.media.video.VideoTrack;
 import dev.onvoid.webrtc.media.MediaDevices;
+import dev.onvoid.webrtc.media.video.VideoTrackSink;
 import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
@@ -16,8 +18,8 @@ import java.util.List;
 public class RTCConnection implements PeerConnectionObserver{
 
     private static RTCPeerConnection peerConnection;
-//    private static VideoDeviceSource videoDeviceSource; // until i see the need for this again
-//    private static VideoTrack videoTrack;
+    private static VideoDeviceSource videoDeviceSource;
+    private static VideoTrack videoTrack;
 
 
 
@@ -35,9 +37,9 @@ public class RTCConnection implements PeerConnectionObserver{
 
 
         //************************** Create Local Video And Audio Track ******************************//
-        VideoDeviceSource videoDeviceSource = new VideoDeviceSource();
+        videoDeviceSource = new VideoDeviceSource();
         videoDeviceSource.setVideoCaptureDevice(MediaDevices.getVideoCaptureDevices().get(0));
-        VideoTrack videoTrack = peerConnectionFactory.createVideoTrack("video", videoDeviceSource);
+        videoTrack = peerConnectionFactory.createVideoTrack("video", videoDeviceSource);
 
 
         AudioTrackSource audioSource =  peerConnectionFactory.createAudioSource(new AudioOptions());
@@ -89,6 +91,18 @@ public class RTCConnection implements PeerConnectionObserver{
             }
         });
     }
+    public void setVideoTrackSink(VideoTrackSink videoTrackSink){
+        try {
+            videoTrack.addSink(videoTrackSink);
+
+        }catch (Exception e){
+            System.out.println("videoTrackErr");
+            e.printStackTrace();
+        }
+    }
+    public void startVideoSource(){
+        videoDeviceSource.start();
+    }
 
 
     @Override
@@ -123,6 +137,7 @@ public class RTCConnection implements PeerConnectionObserver{
 
     @Override
     public void onIceCandidate(RTCIceCandidate rtcIceCandidate) {
+        //send to peer
         System.out.println("onIceCandidate");
 
     }
