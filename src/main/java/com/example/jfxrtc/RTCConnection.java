@@ -1,6 +1,7 @@
 package com.example.jfxrtc;
 
 import dev.onvoid.webrtc.*;
+import dev.onvoid.webrtc.demo.javafx.control.VideoView;
 import dev.onvoid.webrtc.media.MediaStream;
 import dev.onvoid.webrtc.media.MediaStreamTrack;
 import dev.onvoid.webrtc.media.audio.*;
@@ -76,6 +77,7 @@ public class RTCConnection implements PeerConnectionObserver{
 
                         //send to peer
                         System.out.println(rtcSessionDescription);
+
                     }
 
                     @Override
@@ -88,6 +90,46 @@ public class RTCConnection implements PeerConnectionObserver{
             @Override
             public void onFailure(String s) {
 
+            }
+        });
+    }
+
+    private void createAnswer(){
+        peerConnection.createAnswer(new RTCAnswerOptions(), new CreateSessionDescriptionObserver(){
+
+            @Override
+            public void onSuccess(RTCSessionDescription rtcSessionDescription) {
+                peerConnection.setLocalDescription(rtcSessionDescription, new SetSessionDescriptionObserver() {
+                    @Override
+                    public void onSuccess() {
+                        System.out.println("successfully set local description from answer");
+                        // send this to callee
+                    }
+
+                    @Override
+                    public void onFailure(String s) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(String s) {
+
+            }
+        });
+    }
+    public void acceptOffer(RTCSessionDescription offer){
+        peerConnection.setRemoteDescription(offer, new SetSessionDescriptionObserver() {
+            @Override
+            public void onSuccess() {
+                System.out.println("Remote Description Set");
+                createAnswer();
+            }
+
+            @Override
+            public void onFailure(String s) {
+                System.out.println("");
             }
         });
     }
@@ -185,6 +227,17 @@ public class RTCConnection implements PeerConnectionObserver{
 
     @Override
     public void onTrack(RTCRtpTransceiver transceiver) {
+        //edit this
+
+
+        MediaStreamTrack mediaStreamTrack = transceiver.getReceiver().getTrack();
+
+        if(mediaStreamTrack instanceof VideoTrack){
+            VideoTrack videoTrack1 = (VideoTrack) mediaStreamTrack;
+
+            VideoView  remoteVideo = new VideoView();
+            videoTrack1.addSink(remoteVideo::setVideoFrame);
+        }
         PeerConnectionObserver.super.onTrack(transceiver);
     }
 

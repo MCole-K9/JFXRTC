@@ -23,14 +23,25 @@ public class HelloController {
 
     @FXML
     protected void onStartBtnClick(){
-        PeerBridge.rtcConnection.setVideoTrackSink(localVideoView::setVideoFrame);
         PeerBridge.rtcConnection.startVideoSource();
+    }
+
+    @FXML
+    protected void onCallBtnClick(){
+        System.out.println("Call button clicked");
+        PeerBridge.rtcConnection.createOffer();
     }
     @FXML
     private VideoView localVideoView;
 
 
     public HelloController() {
+
+    }
+    public void initialize() {
+        System.out.println("init");
+        PeerBridge.rtcConnection.setVideoTrackSink(localVideoView::setVideoFrame);
+        System.out.println("finish init");
 
     }
 }

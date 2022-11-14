@@ -16,5 +16,6 @@
     <Button onAction="#onHelloButtonClick" text="Hello!" />
     <VideoView fx:id="localVideoView" />
     <Button onAction="#onStartBtnClick" fx:id="btnStartVideo" text="Start Video"/>
+    <Button onAction="#onCallBtnClick" fx:id="btnStartCall" text="Call" />
 
 </VBox>
